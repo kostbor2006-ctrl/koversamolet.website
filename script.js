@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /** 5. ВІДПРАВКА В TELEGRAM **/
     const contactForm = document.getElementById('contactForm');
     const TELEGRAM_TOKEN = '8611141157:AAEgnyiwna5sJShHfCx2FdHuhSfPJh8S8vI'; 
-    const TELEGRAM_CHAT_ID = '829947469'; 
+    const TELEGRAM_CHAT_IDS = ['829947469', '5166749939'];
 
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -179,31 +179,33 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.innerText = currentLang === 'ua' ? 'Відправка...' : 'Отправка...';
 
-            try {
-                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-
-                if (response.ok) {
-                    alert(currentLang === 'ua' ? 'Дякуємо! Заявку надіслано.' : 'Спасибо! Заявка отправлена.');
-                    contactForm.reset();
-                    closeModal();
-                } else {
-                    alert(currentLang === 'ua' ? 'Помилка сервера.' : 'Ошибка сервера.');
-                }
-            } catch (error) {
-                alert(currentLang === 'ua' ? 'Помилка мережі.' : 'Ошибка сети.');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = translations[currentLang].btn_send;
-            }
-        });
+    try {
+        // Создаем список запросов для всех ID
+        const requests = TELEGRAM_CHAT_IDS.map(chatId => 
+            fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            })
+        );
+    
+        // Ждем, пока отправятся оба сообщения
+        const responses = await Promise.all(requests);
+    
+        // Если хотя бы одно сообщение ушло успешно
+        if (responses.some(res => res.ok)) {
+            alert(currentLang === 'ua' ? 'Дякуємо! Заявку надіслано.' : 'Спасибо! Заявка отправлена.');
+            contactForm.reset();
+            closeModal();
+        } else {
+            alert(currentLang === 'ua' ? 'Помилка сервера.' : 'Ошибка сервера.');
+        }
+    } catch (error) {
+        alert(currentLang === 'ua' ? 'Помилка мережі.' : 'Ошибка сети.');
     }
 
     /** 6. ЛОГІКА FAQ (ACCORDION) **/
