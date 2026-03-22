@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://koversamolet.website/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://koversamolet.website/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://koversamolet.website/index-ru.html"/>
+  </url>
+  <url>
+    <loc>https://koversamolet.website/index-ru.html</loc>
+    <lastmod>2026-03-22</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://koversamolet.website/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://koversamolet.website/index-ru.html"/>
+  </url>
+</urlset>
