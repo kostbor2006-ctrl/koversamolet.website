@@ -349,12 +349,19 @@
 
 <div class="modal-overlay" id="requestModal">
     <div class="modal-box">
-        <button class="close-modal">&times;</button>
+        <button class="close-modal" aria-label="Закрыть">&times;</button>
         <h3>Быстрая заявка</h3>
         <p>Оставьте контакты, мы перезвоним!</p>
         <form id="contactForm">
-            <div class="form-group"><input type="text" id="formName" placeholder="Ваше имя" required></div>
-            <div class="form-group"><input type="tel" id="formPhone" placeholder="+38 (0__) ___ __ __" required></div>
+            <div class="form-group">
+                <input type="text" id="formName" placeholder="Ваше имя" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="formPhone" placeholder="+38 (0__) ___ __ __" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="formAddress" placeholder="Напишите адрес откуда вам нужно забрать ковер">
+            </div>
             <div class="form-group">
                 <select id="formService">
                     <option value="carpet">Стирка ковра</option>
@@ -366,6 +373,9 @@
         </form>
     </div>
 </div>
+<script src="script.js"></script>
+</body>
+</html>
 <script src="script.js"></script>
 </body>
 </html>
