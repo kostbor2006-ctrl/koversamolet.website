@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    /** 1. МОБІЛЬНЕ МЕНЮ **/
+    /** 1. МОБИЛЬНОЕ МЕНЮ **/
     const menuToggle = document.getElementById('menuToggle');
     const headerNav = document.getElementById('headerNav');
     
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /** 2. МОДАЛЬНЕ ВІКНО **/
+    /** 2. МОДАЛЬНОЕ ОКНО **/
     const modal = document.getElementById('requestModal');
     const modalTriggers = document.querySelectorAll('.modal-trigger');
     const closeModalBtn = document.querySelector('.close-modal');
@@ -41,13 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     }
 
-    /** 3. ВАЛІДАЦІЯ ТА МАСКА ТЕЛЕФОНУ **/
+    /** 3. ВАЛИДАЦИЯ И МАСКА ТЕЛЕФОНА **/
     const phoneInput = document.getElementById('formPhone');
     const nameInput = document.getElementById('formName');
 
     if (nameInput) {
         nameInput.addEventListener('input', (e) => {
-            // Тільки літери та пробіли
             e.target.value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]/g, '');
         });
     }
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /** 4. ВІДПРАВКА В TELEGRAM (На 2 чати) **/
+    /** 4. ОТПРАВКА В TELEGRAM **/
     const contactForm = document.getElementById('contactForm');
     const TELEGRAM_TOKEN = '8611141157:AAEgnyiwna5sJShHfCx2FdHuhSfPJh8S8vI'; 
     const TELEGRAM_CHAT_IDS = ['829947469', '5166749939']; 
@@ -74,27 +73,50 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const currentLang = document.documentElement.lang || 'ua';
+            const currentLang = document.documentElement.lang || 'uk';
             const submitBtn = contactForm.querySelector('button');
-            const name = nameInput.value.trim();
-            const phone = phoneInput.value.trim();
+            const name = nameInput ? nameInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            const addressInput = document.getElementById('formAddress');
+            const address = addressInput ? addressInput.value.trim() : '';
             const serviceSelect = document.getElementById('formService');
-            const selectedServiceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+            const selectedServiceText = serviceSelect ? serviceSelect.options[serviceSelect.selectedIndex].text : '';
 
             if (phone.length < 13) {
-                const alertMsg = currentLang === 'ua' ? 'Введіть повний номер: +380XXXXXXXXX' : 'Введите полный номер: +380XXXXXXXXX';
+                const alertMsg = (currentLang === 'uk' || currentLang === 'ua') 
+                    ? 'Введіть повний номер: +380XXXXXXXXX' 
+                    : 'Введите полный номер: +380XXXXXXXXX';
                 alert(alertMsg);
                 return;
             }
 
-            // Текст повідомлення (статичний, залежить від мови сторінки)
             const labels = {
-                ua: { title: "🚀 *Нова заявка!*", name: "👤 Ім'я", phone: "📞 Тел", service: "🛠 Послуга", sending: "Відправка..." },
-                ru: { title: "🚀 *Новая заявка!*", name: "👤 Имя", phone: "📞 Тел", service: "🛠 Услуга", sending: "Отправка..." }
+                uk: { 
+                    title: "🚀 *Нова заявка!*", 
+                    name: "👤 Ім'я", 
+                    phone: "📞 Тел", 
+                    address: "📍 Адреса", 
+                    service: "🛠 Послуга", 
+                    notSpecified: "Не вказано",
+                    sending: "Відправка..." 
+                },
+                ru: { 
+                    title: "🚀 *Новая заявка!*", 
+                    name: "👤 Имя", 
+                    phone: "📞 Тел", 
+                    address: "📍 Адрес", 
+                    service: "🛠 Услуга", 
+                    notSpecified: "Не указан",
+                    sending: "Отправка..." 
+                }
             };
-            const l = labels[currentLang] || labels.ua;
+            
+            const isUk = (currentLang === 'uk' || currentLang === 'ua');
+            const l = isUk ? labels.uk : labels.ru;
 
-            const message = `${l.title}\n${l.name}: ${name}\n${l.phone}: ${phone}\n${l.service}: ${selectedServiceText}`;
+            const displayAddress = address || l.notSpecified;
+
+            const message = `${l.title}\n${l.name}: ${name}\n${l.phone}: ${phone}\n${l.address}: ${displayAddress}\n${l.service}: ${selectedServiceText}`;
 
             submitBtn.disabled = true;
             const originalBtnText = submitBtn.innerText;
@@ -117,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isAnySuccess = responses.some(res => res.ok);
 
                 if (isAnySuccess) {
-                    const successMsg = currentLang === 'ua' ? 'Дякуємо! Заявка прийнята.' : 'Спасибо! Заявка принята.';
+                    const successMsg = isUk ? 'Дякуємо! Заявка прийнята.' : 'Спасибо! Заявка принята.';
                     alert(successMsg);
                     contactForm.reset();
                     closeModal();
@@ -133,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /** 5. ЛОГІКА FAQ (Акордеон) **/
+    /** 5. ЛОГИКА FAQ (Аккордеон) **/
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
@@ -146,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /** 6. ПЛАВНИЙ СКРОЛ **/
+    /** 6. ПЛАВНЫЙ СКРОЛЛ **/
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -159,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /** 7. АНІМАЦІЯ ПОЯВИ ЕЛЕМЕНТІВ **/
+    /** 7. АНИМАЦИЯ ПОЯВЛЕНИЯ ЭЛЕМЕНТОВ **/
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
