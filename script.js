@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = () => { if(modal) { modal.classList.remove('active'); document.body.style.overflow = 'initial'; } };
 
     modalTriggers.forEach(btn => btn.addEventListener('click', (e) => {
+        // Защита от дублирования: игнорируем клик, если это кнопка отправки формы!
+        if (btn.getAttribute('type') === 'submit') return;
+        
         e.preventDefault();
         openModal();
     }));
@@ -74,7 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const currentLang = document.documentElement.lang || 'uk';
-            const submitBtn = contactForm.querySelector('button');
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            
+            // Если кнопка уже заблокирована, прерываем повторное выполнение
+            if (submitBtn && submitBtn.disabled) return;
+
             const name = nameInput ? nameInput.value.trim() : '';
             const phone = phoneInput ? phoneInput.value.trim() : '';
             const addressInput = document.getElementById('formAddress');
@@ -118,9 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const message = `${l.title}\n${l.name}: ${name}\n${l.phone}: ${phone}\n${l.address}: ${displayAddress}\n${l.service}: ${selectedServiceText}`;
 
-            submitBtn.disabled = true;
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = l.sending;
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = l.sending;
+            }
 
             try {
                 const requests = TELEGRAM_CHAT_IDS.map(chatId => 
@@ -149,8 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 alert('Connection Error');
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalBtnText;
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = isUk ? 'Відправити' : 'Отправить';
+                }
             }
         });
     }
