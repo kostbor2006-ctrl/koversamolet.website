@@ -24,6 +24,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /** 2. МОДАЛЬНОЕ ОКНО **/
+document.addEventListener('DOMContentLoaded', () => {
+
+    /** 1. МОБИЛЬНОЕ МЕНЮ **/
+    const menuToggle = document.getElementById('menuToggle');
+    const headerNav = document.getElementById('headerNav');
+    
+    if (menuToggle && headerNav) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            headerNav.classList.toggle('active');
+            
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                if (headerNav.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+        });
+    }
+
+    // Закрытие меню при клике на любую ссылку
+    document.querySelectorAll('.nav-list a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (headerNav) headerNav.classList.remove('active');
+            if (menuToggle) {
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+        });
+    });
+
+    /** 2. МОДАЛЬНОЕ ОКНО **/
     const modal = document.getElementById('requestModal');
     const modalTriggers = document.querySelectorAll('.modal-trigger');
     const closeModalBtn = document.querySelector('.close-modal');
