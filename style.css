@@ -187,51 +187,35 @@ body { color: var(--text); background: #fff; overflow-x: hidden; width: 100%; }
     width: 100%; 
 }
 
-/* --- MOBILE OPTIMIZATION --- */
+/* ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ ДЛЯ МОБИЛЬНОГО МЕНЮ */
 @media (max-width: 992px) {
-    .menu-toggle { 
-        display: block; 
+    .menu-toggle {
+        display: block !important;
+        position: relative !important;
+        z-index: 9999 !important; /* Ставим поверх всех элементов */
+        cursor: pointer !important;
+        padding: 10px !important;
     }
 
-    .header-nav { 
-        position: fixed; 
-        top: 80px; 
-        left: -100%; 
-        width: 100%; 
-        height: calc(100vh - 80px); 
-        background: #ffffff; 
-        z-index: 999; 
-        padding: 40px 20px; 
-        transition: left 0.3s ease; 
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        overflow-y: auto;
+    .menu-toggle i {
+        font-size: 24px !important;
+        pointer-events: none !important; /* Клик проходит сквозь иконку на саму кнопку */
     }
 
-    .header-nav.active { 
-        left: 0; 
+    .header-nav {
+        display: block !important;
+        position: fixed !important;
+        top: 70px !important;
+        left: -100% !important;
+        width: 100% !important;
+        height: calc(100vh - 70px) !important;
+        background-color: #ffffff !important;
+        z-index: 9998 !important;
+        transition: left 0.3s ease-in-out !important;
     }
 
-    .nav-list { 
-        flex-direction: column; 
-        align-items: center;
-        gap: 25px; 
-    }
-
-    .nav-list li {
-        width: 100%;
-        text-align: center;
-    }
-
-    .nav-list a { 
-        font-size: 20px; 
-        font-weight: 700;
-        color: var(--dark); 
-        display: block;
-        padding: 10px 0;
-    }
-
-    .header-right .btn-blue { 
-        display: none; 
+    .header-nav.active {
+        left: 0 !important; /* Выезжает при наличии класса active */
     }
 }
 
