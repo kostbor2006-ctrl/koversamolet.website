@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    /** 1. МОБИЛЬНОЕ МЕНЮ **/
+    /** 1. МОБИЛЬНЕ МЕНЮ **/
     const menuToggle = document.getElementById('menuToggle');
     const headerNav = document.getElementById('headerNav');
     
@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /** 2. МОДАЛЬНОЕ ОКНО (ЗАЯВКИ) **/
+    /** 2. МОДАЛЬНЕ ОКНО (ЗАЯВКИ) **/
     const modal = document.getElementById('requestModal');
     const modalTriggers = document.querySelectorAll('.modal-trigger');
-    const closeModalBtn = document.querySelector('.close-modal');
+    const closeModalBtns = modal ? modal.querySelectorAll('.close-modal, [class*="close"], .close') : [];
 
     const openModal = () => { if(modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; } };
     const closeModal = () => { if(modal) { modal.classList.remove('active'); document.body.style.overflow = 'initial'; } };
@@ -37,7 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal();
     }));
     
-    if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', closeModal);
+    });
+
     if(modal) {
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     }
